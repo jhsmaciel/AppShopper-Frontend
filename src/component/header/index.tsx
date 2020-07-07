@@ -6,11 +6,12 @@ import Icon from 'react-native-vector-icons/Feather';
 
 interface HeaderProps {
     onPressBack?: () => void,
-    label?: string
+    label?: string,
+    onPressRightIcon?: () => void
 }
 
 export function Header (props: HeaderProps) {
-    const { label, onPressBack } = props;
+    const { label, onPressBack, onPressRightIcon } = props;
     
     return (
         <View
@@ -26,8 +27,13 @@ export function Header (props: HeaderProps) {
                 style={styles.mid}
             ><Text size="big" color={colors.light}>{label}</Text></View>
             <View
-                style={styles.left} 
-            ><Text>Voltar</Text></View>
+                style={styles.left}
+                onTouchStart={onPressRightIcon}
+            >
+                {
+                    onPressRightIcon && <Icon name="settings" size={20} color={colors.light} />
+                }
+            </View>
         </View>
     );
 }

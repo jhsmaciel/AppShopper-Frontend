@@ -1,4 +1,5 @@
 import api from './';
+import { Moment } from 'moment';
 
 export interface AuthenticationForm {
     username: string,
@@ -13,7 +14,7 @@ interface AuthenticationResponse {
       id: number,
       name: string,
       email: string,
-      nascimento: string
+      nascimento: Moment
 }
 
 export const authenticate = async (authForm: AuthenticationForm) => {

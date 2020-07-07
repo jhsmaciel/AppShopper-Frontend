@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, StyleSheet } from 'react-native';
 import { LoginSvg } from '../../assets/svg';
 import { Button } from '../../component/button';
 import { Text } from '../../component/text';
 import { Input, InputPassword } from '../../component/Input';
 import { useAuthentication } from '../../context/LoginContext';
 import { showMessage, hideMessage } from 'react-native-flash-message';
+import { colors } from '../../config';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Login: React.FC = () => {
+const Login = ({ navigation }: { navigation: any }) => {
     const [login, setLogin] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -29,46 +31,30 @@ const Login: React.FC = () => {
     return (
         <>
             <View 
-                style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: '#FFF',
-                }} 
+                style={styles.content} 
             >
                 <View
-                    style={{
-                        height: '20%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
+                    style={styles.header}
                 >
                     <Text
                         size="big"
                         type="semibold"
+                        color={colors.light}
                     > App Shopper</Text>
                 </View>
                 <View
-                    style={{
-                        height: '30%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
+                    style={styles.svg}
                 >
                     <LoginSvg width={150}/>
                 </View>
                 <View 
-                    style={{
-                        height: '50%',
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        width: '80%'
-                    }}
+                    style={styles.fields}
                 >
+
                     <Input
                         placeholder="Login"
                         onChange={setLogin}
                         value={login}
-                        
                     />
                     <InputPassword
                         placeholder="Senha"
@@ -81,6 +67,14 @@ const Login: React.FC = () => {
                     >
                         Entrar
                     </Button>
+                    <View
+                        style={styles.viewText}
+                    >
+                        <Text color={colors.dark} style={{ marginRight: 5}}>Não tem conta?</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('CreateUser')}>
+                            <Text>Cadastrar</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </>
@@ -88,3 +82,36 @@ const Login: React.FC = () => {
 }
 
 export default Login
+
+
+const styles = StyleSheet.create({
+    content: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.light,
+    },
+    header: {
+        height: '20%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.primary,
+        width: '100%',
+        borderBottomEndRadius: 150,
+    },
+    svg: {
+        height: '30%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    fields: {
+        height: '50%',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        width: '80%'
+    },
+    viewText: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})

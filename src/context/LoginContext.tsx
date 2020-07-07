@@ -3,17 +3,20 @@ import AsyncStorage from '@react-native-community/async-storage';
 import api from '../service';
 import { nameStorage } from '../config'
 import { authenticate, AuthenticationForm } from '../service/authentication';
+import { Moment } from 'moment';
 
-interface User {
+export interface User {
     id: number,
     name: string,
     email: string,
-    nascimento: string
+    nascimento: Moment
 }
+
 
 interface ContextLoginValues {
     signed: boolean, 
     user: User,
+    setUser: (value: User) => void,
     loading: boolean,
     signIn: (authenticationForm: AuthenticationForm) => void,
     signOut: () => void
@@ -52,7 +55,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             nascimento: userInfos.nascimento 
         }
 
-        console.log(userFormed)
         const tokenFormed = `${userInfos.token.tokenType} ${userInfos.token.token}`;
 
         api.defaults.headers["Authorization"] = tokenFormed;
@@ -72,7 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ signed, user, loading, signIn, signOut }}>
+        <AuthContext.Provider value={{ signed, user, loading, signIn, signOut, setUser }}>
             {children}
         </AuthContext.Provider>
     );
