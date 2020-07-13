@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View,  } from "react-native";
 import { colors } from "../../config";
 import { Text } from '../text';
+import { ErrorMessage, useFormikContext, FormikValues } from 'formik';
+import { FormValidateContext } from '../../screen/login/createuser';
 
 export interface InputProps {
     placeholder?: string,
     maxLength?: number,
     onChange: (value: string) => void,
-    value: string
     label?: string,
+    value: string,
     editable?: boolean,
-    onClick?: () => void
+    onClick?: () => void,
+    onBlur?: (value: any) => void,
+}
+
+const MessageError: React.FC<{ name: string }> = (props) => {
+    return (
+        <ErrorMessage name={props.name} render={(errMsg) =><Text color={colors.error}>{errMsg}</Text>}/>
+    );
 }
 
 export function Input (props: InputProps) {
     const { editable = true } = props;
+
     return (
         <View
             style={{
@@ -30,6 +40,7 @@ export function Input (props: InputProps) {
                 maxLength={props.maxLength}
                 style={styles.input}
                 value={props.value}
+                onBlur={props.onBlur}
                 editable={editable}
                 onChangeText={props.onChange}
                 onTouchStart={props?.onClick}
@@ -39,6 +50,45 @@ export function Input (props: InputProps) {
     );
 }
 
+interface FieldProps {
+    name: string,
+    label?: string,
+    // value: string,
+    onClick?: () => void,
+    placeholder?: string,
+    maxLength?: number,
+    onChange?: (value: string) => void,
+    onBlur?: (e: any) => void,
+}
+export function Field (props: FieldProps) {
+    const { touched, handleBlur, handleChange, isSubmitting, values, initialValues } = useFormikContext<FormikValues>();
+    const { name } = props;
+    return (
+        <View
+            style={{
+                width: '100%'
+            }}
+        >
+            {
+                props?.label && <Text size="small" style={styles.label}>{props?.label}</Text>
+            }
+            <TextInput
+                placeholderTextColor={colors.primary}
+                placeholder={props.placeholder}
+                maxLength={props.maxLength}
+                style={styles.input}
+                // onBlur={handleChange(props.name)}
+                editable={!isSubmitting}
+                onChangeText={props?.onChange}
+                value={values[name]}
+                onBlur={props?.onBlur}
+                // onChangeText={handleBlur(props.name)}
+                autoCorrect={false}
+            />
+            <MessageError name={props.name}/>
+        </View>
+    );
+}
 
 interface InputPasswordProps {
     placeholder?: string,
@@ -46,7 +96,7 @@ interface InputPasswordProps {
     onChange: (value: string) => void,
     value: string,
     disabled?: boolean,
-    label?: string
+    label?: string,
 }
 
 export function InputPassword (props: InputPasswordProps) {

@@ -4,7 +4,8 @@ export enum colors {
     primary = "#C1559D",
     light = "#FFFFFF",
     disabled = "#ECECEC",
-    dark = "#6B757D"
+    dark = "#6B757D",
+    error = "red"
 }
 
 export enum sizes {
